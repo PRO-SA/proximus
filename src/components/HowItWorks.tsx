@@ -53,7 +53,7 @@ export function HowItWorks() {
   ];
 
   return (
-    <section className="py-24 px-6">
+    <section className="py-24 px-6 section-gradient-teal">
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -70,42 +70,55 @@ export function HowItWorks() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {steps.map((step, i) => {
-            const isElectric = i === 2;
+            const stepStyles = [
+              {
+                gradient: 'bg-linear-to-br from-frappe-blue/10 via-frappe-sapphire/5 to-transparent',
+                border: 'border-frappe-blue/30 hover:border-frappe-blue/50',
+                numberColor: 'text-frappe-blue/30 group-hover:text-frappe-blue/50',
+                iconBg: 'bg-frappe-blue/20',
+                iconColor: 'text-frappe-blue',
+                titleColor: 'text-frappe-blue',
+              },
+              {
+                gradient: 'bg-linear-to-br from-frappe-teal/10 via-frappe-green/5 to-transparent',
+                border: 'border-frappe-teal/30 hover:border-frappe-teal/50',
+                numberColor: 'text-frappe-teal/30 group-hover:text-frappe-teal/50',
+                iconBg: 'bg-frappe-teal/20',
+                iconColor: 'text-frappe-teal',
+                titleColor: 'text-frappe-teal',
+              },
+              {
+                gradient: 'bg-linear-to-br from-accent-yellow/10 via-frappe-peach/10 to-accent-yellow/5',
+                border: 'border-accent-yellow/40 hover:border-accent-yellow/60 hover:shadow-[0_0_30px_rgba(229,200,144,0.15)]',
+                numberColor: 'text-accent-yellow/30 group-hover:text-accent-yellow/50',
+                iconBg: 'bg-accent-yellow/20',
+                iconColor: 'text-accent-yellow',
+                titleColor: 'text-accent-yellow',
+                isElectric: true,
+              },
+            ][i];
+
             return (
               <motion.div
                 key={i}
                 variants={itemVariants}
-                className={`relative p-8 rounded-3xl backdrop-blur-sm border group transition-all duration-300 ${
-                  isElectric
-                    ? 'bg-gradient-to-br from-accent-yellow/10 via-frappe-peach/10 to-accent-yellow/5 border-accent-yellow/40 hover:border-accent-yellow/60 hover:shadow-[0_0_30px_rgba(229,200,144,0.15)] electric-box'
-                    : 'bg-surface0/30 border-surface1 hover:border-accent-blue/30'
-                }`}
+                className={`relative p-8 rounded-3xl backdrop-blur-sm border group transition-all duration-300 ${stepStyles.gradient} ${stepStyles.border} ${stepStyles.isElectric ? 'electric-box' : ''}`}
               >
-                {isElectric && (
+                {stepStyles.isElectric && (
                   <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
-                    <div className="absolute inset-0 bg-gradient-to-br from-accent-yellow/5 to-transparent animate-pulse" />
+                    <div className="absolute inset-0 bg-linear-to-br from-accent-yellow/5 to-transparent animate-pulse" />
                   </div>
                 )}
 
-                <div className={`absolute top-6 right-6 text-4xl font-bold transition-colors ${
-                  isElectric
-                    ? 'text-accent-yellow/30 group-hover:text-accent-yellow/50'
-                    : 'text-surface1 group-hover:text-surface2'
-                }`}>
+                <div className={`absolute top-6 right-6 text-4xl font-bold transition-colors ${stepStyles.numberColor}`}>
                   {step.number}
                 </div>
 
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${
-                  isElectric
-                    ? 'bg-accent-yellow/20 text-accent-yellow'
-                    : 'bg-accent-blue/10 text-accent-blue'
-                }`}>
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${stepStyles.iconBg} ${stepStyles.iconColor}`}>
                   {step.icon}
                 </div>
 
-                <h3 className={`text-xl font-semibold mb-3 ${
-                  isElectric ? 'text-accent-yellow' : ''
-                }`}>{step.title}</h3>
+                <h3 className={`text-xl font-semibold mb-3 ${stepStyles.titleColor}`}>{step.title}</h3>
                 <p className="text-subtext0 leading-relaxed">{step.description}</p>
 
                 {i < steps.length - 1 && (

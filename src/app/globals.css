@@ -242,3 +242,41 @@ body {
 .electric-box {
   animation: electric-shimmer 3s ease-in-out infinite;
 }
+
+/* Section gradient backgrounds */
+.section-gradient-blue {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(140, 170, 238, 0.1), transparent);
+}
+
+.section-gradient-mauve {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(202, 158, 230, 0.08), transparent);
+}
+
+.section-gradient-teal {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(129, 200, 190, 0.08), transparent);
+}
+
+/* Floating orbs animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-10px) translateX(5px);
+  }
+  50% {
+    transform: translateY(-5px) translateX(-5px);
+  }
+  75% {
+    transform: translateY(-15px) translateX(3px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 8s ease-in-out infinite;
+  animation-delay: -2s;
+}

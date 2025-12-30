@@ -514,7 +514,7 @@ export function BentoDemo() {
   ];
 
   return (
-    <section className="py-24 px-6">
+    <section className="py-24 px-6 section-gradient-mauve">
       <motion.div
         variants={containerVariants}
         initial="hidden"

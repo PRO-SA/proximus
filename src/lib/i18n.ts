@@ -55,7 +55,7 @@ export const translations = {
     faq5Answer: 'Ja! Janus er bygget fra grunnen for å forstå både Bokmål og Nynorsk.',
 
     // Footer
-    footerCompany: 'PROSA AS',
+    footerCompany: 'PRO-SA',
     footerPrivacy: 'Personvernerklæring',
     footerRights: 'Alle rettigheter forbeholdt',
 
@@ -125,7 +125,7 @@ export const translations = {
     faq5Answer: 'Yes! Janus is built from the ground up to understand both Bokmål and Nynorsk.',
 
     // Footer
-    footerCompany: 'PROSA AS',
+    footerCompany: 'PRO-SA',
     footerPrivacy: 'Privacy Policy',
     footerRights: 'All rights reserved',
 
