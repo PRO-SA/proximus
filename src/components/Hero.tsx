@@ -79,7 +79,7 @@ export function Hero() {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 0.5 }}
         onClick={scrollToContent}
-        className="absolute bottom-8 right-8 text-subtext0 hover:text-foreground transition-colors cursor-pointer z-10"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-subtext0 hover:text-foreground transition-colors cursor-pointer z-10"
         aria-label="Scroll down"
       >
         <motion.div
