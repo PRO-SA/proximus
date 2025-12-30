@@ -29,9 +29,9 @@ export function AsciiBackground() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.5 }}
-        className="relative group"
+        className="relative -mt-32"
       >
-        <pre className="text-[10px] lg:text-[14px] xl:text-[18px] 2xl:text-[22px] font-mono whitespace-pre leading-tight opacity-20">
+        <pre className="text-[10px] lg:text-[14px] xl:text-[18px] 2xl:text-[22px] font-mono whitespace-pre leading-tight opacity-10">
           {lines.map((line, index) => (
             <motion.span
               key={index}
