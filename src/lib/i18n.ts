@@ -10,8 +10,8 @@ export const translations = {
     logo: 'Janus',
 
     // Hero
-    heroTitle: 'NotebookLM for Norge',
-    heroSubtitle: 'AI som forstår den norske læreplanen, forskjellen mellom Bokmål og Nynorsk, og de spesifikke kravene til norske skoler.',
+    heroTitle: 'Janus revolusjonerer norsk utdanning',
+    heroSubtitle: 'KI-drevet læringsplattform som tilpasser seg ditt domene og dine mål. Utfordrer deg, lærer av deg og optimaliserer fremdriften din.',
     emailPlaceholder: 'Din e-postadresse',
     ctaButton: 'Meld deg på ventelisten',
     successMessage: 'Takk - du er på ventelisten',
@@ -29,8 +29,8 @@ export const translations = {
     step1Description: 'Legg inn e-postadressen din for å sikre plassen din på ventelisten.',
     step2Title: 'Vent på lansering',
     step2Description: 'Vi sender deg beskjed én uke før, og på selve lanseringsdagen.',
-    step3Title: 'Få tilgang',
-    step3Description: 'Bli blant de første som tester Janus med full beta-tilgang.',
+    step3Title: 'Turboladning',
+    step3Description: 'Slipp løs ditt fulle potensial med KI-drevet læring.',
 
     // Bento demos
     demosTitle: 'Hva du kan gjøre med Janus',
@@ -80,8 +80,8 @@ export const translations = {
     logo: 'Janus',
 
     // Hero
-    heroTitle: 'NotebookLM for Norway',
-    heroSubtitle: 'AI that understands the Norwegian curriculum, the difference between Bokmål and Nynorsk, and the specific requirements of Norwegian schools.',
+    heroTitle: 'Janus is revolutionizing Norwegian education',
+    heroSubtitle: 'AI-powered learning platform that adapts to your domain and goals. Challenges you, learns from you, and optimizes your progress.',
     emailPlaceholder: 'Your email address',
     ctaButton: 'Join the waitlist',
     successMessage: 'Thanks - you\'re on the list',
@@ -99,8 +99,8 @@ export const translations = {
     step1Description: 'Enter your email to secure your spot on the waitlist.',
     step2Title: 'Wait for launch',
     step2Description: 'We\'ll notify you one week before and on launch day.',
-    step3Title: 'Get access',
-    step3Description: 'Be among the first to test Janus with full beta access.',
+    step3Title: 'Supercharge',
+    step3Description: 'Unleash your full potential with AI-powered learning.',
 
     // Bento demos
     demosTitle: 'What you can do with Janus',

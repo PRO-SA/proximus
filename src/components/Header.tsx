@@ -14,14 +14,7 @@ export function Header() {
       transition={{ duration: 0.5 }}
       className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
     >
-      <div className="mx-auto max-w-6xl flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-accent-blue flex items-center justify-center">
-            <span className="text-background font-bold text-sm">J</span>
-          </div>
-          <span className="font-bold text-lg tracking-tight">{t('logo')}</span>
-        </div>
-
+      <div className="mx-auto max-w-6xl flex items-center justify-end">
         <div className="flex items-center gap-2 bg-surface0/50 backdrop-blur-xl rounded-full p-1">
           <button
             onClick={() => setLanguage('no')}

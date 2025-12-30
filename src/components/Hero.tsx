@@ -36,7 +36,7 @@ export function Hero() {
   };
 
   return (
-    <section className="min-h-screen flex items-end justify-center px-6 pt-24 pb-24 relative overflow-hidden">
+    <section className="min-h-screen flex items-center justify-center px-6 pt-48 pb-24 relative overflow-hidden">
       <AsciiBackground />
 
       <motion.div
@@ -48,7 +48,7 @@ export function Hero() {
         <motion.div variants={itemVariants} className="mb-6">
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface0/50 backdrop-blur-sm text-sm text-subtext1 border border-surface1">
             <span className="w-2 h-2 rounded-full bg-accent-green animate-pulse" />
-            Beta Q1 2025
+            Beta Q1 2026
           </span>
         </motion.div>
 

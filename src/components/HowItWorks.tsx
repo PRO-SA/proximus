@@ -69,28 +69,51 @@ export function HowItWorks() {
         </motion.h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {steps.map((step, i) => (
-            <motion.div
-              key={i}
-              variants={itemVariants}
-              className="relative p-8 rounded-3xl bg-surface0/30 backdrop-blur-sm border border-surface1 group hover:border-accent-blue/30 transition-colors"
-            >
-              <div className="absolute top-6 right-6 text-4xl font-bold text-surface1 group-hover:text-surface2 transition-colors">
-                {step.number}
-              </div>
+          {steps.map((step, i) => {
+            const isElectric = i === 2;
+            return (
+              <motion.div
+                key={i}
+                variants={itemVariants}
+                className={`relative p-8 rounded-3xl backdrop-blur-sm border group transition-all duration-300 ${
+                  isElectric
+                    ? 'bg-gradient-to-br from-accent-yellow/10 via-frappe-peach/10 to-accent-yellow/5 border-accent-yellow/40 hover:border-accent-yellow/60 hover:shadow-[0_0_30px_rgba(229,200,144,0.15)] electric-box'
+                    : 'bg-surface0/30 border-surface1 hover:border-accent-blue/30'
+                }`}
+              >
+                {isElectric && (
+                  <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent-yellow/5 to-transparent animate-pulse" />
+                  </div>
+                )}
 
-              <div className="w-12 h-12 rounded-2xl bg-accent-blue/10 flex items-center justify-center text-accent-blue mb-6">
-                {step.icon}
-              </div>
+                <div className={`absolute top-6 right-6 text-4xl font-bold transition-colors ${
+                  isElectric
+                    ? 'text-accent-yellow/30 group-hover:text-accent-yellow/50'
+                    : 'text-surface1 group-hover:text-surface2'
+                }`}>
+                  {step.number}
+                </div>
 
-              <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-              <p className="text-subtext0 leading-relaxed">{step.description}</p>
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${
+                  isElectric
+                    ? 'bg-accent-yellow/20 text-accent-yellow'
+                    : 'bg-accent-blue/10 text-accent-blue'
+                }`}>
+                  {step.icon}
+                </div>
 
-              {i < steps.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-[2px] bg-surface1" />
-              )}
-            </motion.div>
-          ))}
+                <h3 className={`text-xl font-semibold mb-3 ${
+                  isElectric ? 'text-accent-yellow' : ''
+                }`}>{step.title}</h3>
+                <p className="text-subtext0 leading-relaxed">{step.description}</p>
+
+                {i < steps.length - 1 && (
+                  <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-[2px] bg-surface1" />
+                )}
+              </motion.div>
+            );
+          })}
         </div>
       </motion.div>
     </section>

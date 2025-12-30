@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -18,70 +18,171 @@ const itemVariants = {
 };
 
 function PDFDemo() {
-  const [highlighted, setHighlighted] = useState(false);
+  const { language } = useLanguage();
+  const [stage, setStage] = useState<'upload' | 'processing' | 'streaming'>('upload');
+  const [streamedText, setStreamedText] = useState('');
+  const streamRef = useRef<NodeJS.Timeout | null>(null);
+
+  const summaryText = language === 'no'
+    ? 'Big O-notasjon beskriver algoritmers tidskompleksitet. O(1) er konstant tid, O(n) er lineær, og O(n²) er kvadratisk. For sortering er QuickSort gjennomsnittlig O(n log n), mens BubbleSort er O(n²)...'
+    : 'Big O notation describes algorithm time complexity. O(1) is constant time, O(n) is linear, and O(n²) is quadratic. For sorting, QuickSort averages O(n log n), while BubbleSort is O(n²)...';
 
   useEffect(() => {
-    const interval = setInterval(() => setHighlighted((h) => !h), 2000);
-    return () => clearInterval(interval);
-  }, []);
+    const cycleDemo = () => {
+      setStage('upload');
+      setStreamedText('');
+
+      setTimeout(() => setStage('processing'), 1500);
+      setTimeout(() => {
+        setStage('streaming');
+        let index = 0;
+        streamRef.current = setInterval(() => {
+          if (index < summaryText.length) {
+            setStreamedText(summaryText.slice(0, index + 1));
+            index++;
+          } else {
+            if (streamRef.current) clearInterval(streamRef.current);
+          }
+        }, 30);
+      }, 2500);
+    };
+
+    cycleDemo();
+    const mainInterval = setInterval(cycleDemo, 10000);
+
+    return () => {
+      clearInterval(mainInterval);
+      if (streamRef.current) clearInterval(streamRef.current);
+    };
+  }, [summaryText]);
 
   return (
-    <div className="flex gap-4 h-48">
-      {/* Source document */}
-      <div className="flex-1 bg-surface1/50 rounded-xl p-4 text-xs space-y-2 overflow-hidden">
-        <div className="h-2 w-3/4 bg-subtext0/20 rounded" />
-        <div className="h-2 w-full bg-subtext0/20 rounded" />
+    <div className="flex gap-4 h-52">
+      {/* PDF Upload Area */}
+      <div className="w-32 flex-shrink-0 bg-surface1/50 rounded-xl p-3 flex flex-col items-center justify-center border-2 border-dashed border-surface2">
         <motion.div
-          animate={{ backgroundColor: highlighted ? 'rgba(140, 170, 238, 0.3)' : 'rgba(165, 173, 206, 0.2)' }}
-          className="h-2 w-5/6 rounded transition-colors"
-        />
-        <div className="h-2 w-full bg-subtext0/20 rounded" />
-        <motion.div
-          animate={{ backgroundColor: highlighted ? 'rgba(140, 170, 238, 0.3)' : 'rgba(165, 173, 206, 0.2)' }}
-          className="h-2 w-2/3 rounded transition-colors"
-        />
-        <div className="h-2 w-4/5 bg-subtext0/20 rounded" />
+          animate={stage === 'processing' ? { scale: [1, 1.1, 1], opacity: [1, 0.7, 1] } : {}}
+          transition={{ duration: 1, repeat: stage === 'processing' ? Infinity : 0 }}
+          className="w-12 h-14 bg-accent-blue/20 rounded-lg flex items-center justify-center mb-2"
+        >
+          <svg className="w-6 h-6 text-accent-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </motion.div>
+        <span className="text-[10px] text-subtext0 text-center">algoritmer.pdf</span>
+        {stage === 'processing' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-[9px] text-accent-blue mt-1"
+          >
+            {language === 'no' ? 'Analyserer...' : 'Analyzing...'}
+          </motion.div>
+        )}
       </div>
 
-      {/* Summary panel */}
-      <div className="flex-1 bg-accent-blue/10 rounded-xl p-4 border border-accent-blue/20">
-        <div className="text-xs text-accent-blue font-medium mb-2">Sammendrag</div>
-        <div className="space-y-1.5">
-          <div className="h-2 w-full bg-accent-blue/20 rounded" />
-          <div className="h-2 w-4/5 bg-accent-blue/20 rounded" />
-          <div className="h-2 w-3/4 bg-accent-blue/20 rounded" />
+      {/* Streaming Output */}
+      <div className="flex-1 bg-accent-blue/10 rounded-xl p-4 border border-accent-blue/20 overflow-hidden">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-2 h-2 rounded-full bg-accent-blue animate-pulse" />
+          <span className="text-xs text-accent-blue font-medium">
+            {language === 'no' ? 'Sammendrag' : 'Summary'}
+          </span>
         </div>
+        <AnimatePresence mode="wait">
+          {stage === 'upload' && (
+            <motion.div
+              key="waiting"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              className="text-xs text-subtext0"
+            >
+              {language === 'no' ? 'Venter på dokument...' : 'Waiting for document...'}
+            </motion.div>
+          )}
+          {stage === 'processing' && (
+            <motion.div
+              key="processing"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex items-center gap-2"
+            >
+              <div className="flex gap-1">
+                {[0, 1, 2].map((i) => (
+                  <motion.div
+                    key={i}
+                    animate={{ y: [0, -4, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.1 }}
+                    className="w-1.5 h-1.5 rounded-full bg-accent-blue"
+                  />
+                ))}
+              </div>
+              <span className="text-xs text-subtext0">
+                {language === 'no' ? 'Genererer sammendrag...' : 'Generating summary...'}
+              </span>
+            </motion.div>
+          )}
+          {stage === 'streaming' && (
+            <motion.div
+              key="streaming"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-xs text-foreground leading-relaxed"
+            >
+              {streamedText}
+              <motion.span
+                animate={{ opacity: [1, 0] }}
+                transition={{ duration: 0.5, repeat: Infinity }}
+                className="inline-block w-0.5 h-3 bg-accent-blue ml-0.5 align-middle"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
 }
 
 function ChatDemo() {
+  const { language } = useLanguage();
   const messages = [
-    { role: 'user', text: 'Hva sier kapittel 3 om...' },
-    { role: 'assistant', text: 'Ifølge s. 47: "..."', hasSource: true },
+    {
+      role: 'user',
+      text: language === 'no'
+        ? 'Hva er forskjellen på stakk og kø?'
+        : 'What is the difference between stack and queue?',
+    },
+    {
+      role: 'assistant',
+      text: language === 'no'
+        ? 'En stakk bruker LIFO (Last In, First Out), mens en kø bruker FIFO (First In, First Out).'
+        : 'A stack uses LIFO (Last In, First Out), while a queue uses FIFO (First In, First Out).',
+      source: language === 'no' ? 'Kap. 4: Datastrukturer' : 'Ch. 4: Data Structures',
+    },
   ];
 
   return (
-    <div className="space-y-3 h-48 flex flex-col justify-end">
+    <div className="space-y-3 h-52 flex flex-col justify-end">
       {messages.map((msg, i) => (
         <motion.div
           key={i}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.5 }}
+          transition={{ delay: i * 0.8 }}
           className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
         >
           <div
-            className={`px-4 py-2 rounded-2xl max-w-[80%] text-sm ${
+            className={`px-4 py-2.5 rounded-2xl max-w-[85%] text-sm ${
               msg.role === 'user'
                 ? 'bg-accent-blue text-background'
                 : 'bg-surface1/50 text-foreground'
             }`}
           >
             {msg.text}
-            {msg.hasSource && (
-              <span className="block text-xs mt-1 opacity-70">[Kilde: Kapittel 3]</span>
+            {msg.source && (
+              <span className="block text-xs mt-1.5 opacity-70 text-accent-blue">[{msg.source}]</span>
             )}
           </div>
         </motion.div>
@@ -92,58 +193,285 @@ function ChatDemo() {
 
 function ExamDemo() {
   const { language } = useLanguage();
-  const types = [
-    { id: 'mcq', label: 'Flervalg', labelEn: 'Multiple Choice' },
-    { id: 'short', label: 'Kort svar', labelEn: 'Short Answer' },
-    { id: 'long', label: 'Langt svar', labelEn: 'Long Answer' },
-  ];
-  const [activeType, setActiveType] = useState(0);
 
+  const questionsNo = [
+    {
+      id: 'mcq',
+      label: 'Flervalg',
+      question: 'Hva er tidskompleksiteten til binærsøk?',
+      options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+      correctIndex: 1,
+      userAnswer: '',
+      feedback: '',
+    },
+    {
+      id: 'short',
+      label: 'Kort svar',
+      question: 'Forklar hva rekursjon er med ett eksempel.',
+      userAnswer: 'Rekursjon er når en funksjon kaller seg selv. F.eks. factorial(n) = n * factorial(n-1).',
+      feedback: '✓ Bra! Du har forstått konseptet. Husk å nevne base case for å unngå uendelig rekursjon.',
+    },
+    {
+      id: 'long',
+      label: 'Langt svar',
+      question: 'Sammenlign objektorientert og funksjonell programmering.',
+      userAnswer: 'OOP bruker klasser og objekter, mens FP fokuserer på rene funksjoner uten sideeffekter...',
+      feedback: '✓ God start! Utvid med konkrete eksempler på immutabilitet i FP og arv i OOP.',
+    },
+  ];
+
+  const questionsEn = [
+    {
+      id: 'mcq',
+      label: 'Multiple Choice',
+      question: 'What is the time complexity of binary search?',
+      options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
+      correctIndex: 1,
+      userAnswer: '',
+      feedback: '',
+    },
+    {
+      id: 'short',
+      label: 'Short Answer',
+      question: 'Explain what recursion is with one example.',
+      userAnswer: 'Recursion is when a function calls itself. E.g. factorial(n) = n * factorial(n-1).',
+      feedback: '✓ Good! You understood the concept. Remember to mention base case to avoid infinite recursion.',
+    },
+    {
+      id: 'long',
+      label: 'Long Answer',
+      question: 'Compare object-oriented and functional programming.',
+      userAnswer: 'OOP uses classes and objects, while FP focuses on pure functions without side effects...',
+      feedback: '✓ Good start! Expand with concrete examples of immutability in FP and inheritance in OOP.',
+    },
+  ];
+
+  const questions = language === 'no' ? questionsNo : questionsEn;
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [typedAnswer, setTypedAnswer] = useState('');
+  const [feedbackText, setFeedbackText] = useState('');
+  const [showFeedback, setShowFeedback] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const feedbackIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const nextTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const goToNext = () => {
+    setActiveIndex((prev) => (prev + 1) % 3);
+    setSelectedOption(null);
+    setTypedAnswer('');
+    setFeedbackText('');
+    setShowFeedback(false);
+  };
+
+  // Handle typing and feedback animation
   useEffect(() => {
-    const interval = setInterval(() => setActiveType((t) => (t + 1) % types.length), 2500);
-    return () => clearInterval(interval);
-  }, [types.length]);
+    // Clear any existing intervals/timeouts
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (feedbackIntervalRef.current) clearInterval(feedbackIntervalRef.current);
+    if (nextTimeoutRef.current) clearTimeout(nextTimeoutRef.current);
+
+    setTypedAnswer('');
+    setFeedbackText('');
+    setShowFeedback(false);
+    setSelectedOption(null);
+
+    // MCQ: show answer after 1.5s, then wait 2s and go next
+    if (activeIndex === 0) {
+      const timer = setTimeout(() => {
+        setSelectedOption(1);
+        nextTimeoutRef.current = setTimeout(goToNext, 2000);
+      }, 1500);
+      return () => {
+        clearTimeout(timer);
+        if (nextTimeoutRef.current) clearTimeout(nextTimeoutRef.current);
+      };
+    }
+
+    // Short/Long answer: type answer, show feedback, wait, then go next
+    const q = questions[activeIndex];
+    if (!q.userAnswer) return;
+
+    let answerIdx = 0;
+    intervalRef.current = setInterval(() => {
+      answerIdx++;
+      if (answerIdx <= q.userAnswer.length) {
+        setTypedAnswer(q.userAnswer.slice(0, answerIdx));
+      } else {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        // Start feedback after typing completes
+        setTimeout(() => {
+          setShowFeedback(true);
+          let fbIdx = 0;
+          feedbackIntervalRef.current = setInterval(() => {
+            fbIdx++;
+            if (fbIdx <= q.feedback.length) {
+              setFeedbackText(q.feedback.slice(0, fbIdx));
+            } else {
+              if (feedbackIntervalRef.current) clearInterval(feedbackIntervalRef.current);
+              // Wait 2s after feedback is done, then go next
+              nextTimeoutRef.current = setTimeout(goToNext, 2000);
+            }
+          }, 25);
+        }, 400);
+      }
+    }, 35);
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (feedbackIntervalRef.current) clearInterval(feedbackIntervalRef.current);
+      if (nextTimeoutRef.current) clearTimeout(nextTimeoutRef.current);
+    };
+  }, [activeIndex, language]);
+
+  const activeQuestion = questions[activeIndex];
 
   return (
-    <div className="h-48 flex flex-col">
-      {/* Type toggles */}
-      <div className="flex gap-2 mb-4">
-        {types.map((type, i) => (
+    <div className="h-64 flex flex-col">
+      {/* Question type tabs */}
+      <div className="flex gap-2 mb-3">
+        {questions.map((q, i) => (
           <button
-            key={type.id}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-              i === activeType
+            key={q.id}
+            onClick={() => {
+              setActiveIndex(i);
+              setSelectedOption(null);
+              setTypedAnswer('');
+              setFeedbackText('');
+              setShowFeedback(false);
+            }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
+              i === activeIndex
                 ? 'bg-accent-mauve text-background'
-                : 'bg-surface1/50 text-subtext0'
+                : 'bg-surface1/50 text-subtext0 hover:bg-surface1'
             }`}
           >
-            {language === 'no' ? type.label : type.labelEn}
+            {q.label}
           </button>
         ))}
       </div>
 
-      {/* Question preview */}
+      {/* Question content */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={activeType}
+          key={activeIndex}
           initial={{ opacity: 0, x: 10 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -10 }}
-          className="flex-1 bg-surface1/30 rounded-xl p-4"
+          className="flex-1 bg-surface1/30 rounded-xl p-4 overflow-hidden"
         >
-          <div className="text-sm text-foreground mb-3 typewriter-cursor">
-            {activeType === 0 && (language === 'no' ? 'Hvilket alternativ beskriver...' : 'Which option describes...')}
-            {activeType === 1 && (language === 'no' ? 'Forklar kort hva...' : 'Briefly explain what...')}
-            {activeType === 2 && (language === 'no' ? 'Drøft sammenhengen mellom...' : 'Discuss the relationship between...')}
+          <div className="text-sm text-foreground font-medium mb-3">
+            {activeQuestion.question}
           </div>
-          {activeType === 0 && (
+
+          {/* Multiple choice options */}
+          {activeQuestion.id === 'mcq' && activeQuestion.options && (
             <div className="space-y-2">
-              {['A', 'B', 'C', 'D'].map((opt) => (
-                <div key={opt} className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded-full border border-subtext0/30" />
-                  <div className="h-2 flex-1 bg-subtext0/20 rounded" />
-                </div>
+              {activeQuestion.options.map((opt, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -5 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all ${
+                    selectedOption === i
+                      ? i === activeQuestion.correctIndex
+                        ? 'bg-accent-green/20 border border-accent-green/40'
+                        : 'bg-accent-red/20 border border-accent-red/40'
+                      : 'hover:bg-surface1/50'
+                  }`}
+                  onClick={() => setSelectedOption(i)}
+                >
+                  <div
+                    className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${
+                      selectedOption === i
+                        ? i === activeQuestion.correctIndex
+                          ? 'border-accent-green bg-accent-green'
+                          : 'border-accent-red bg-accent-red'
+                        : 'border-subtext0/40'
+                    }`}
+                  >
+                    {selectedOption === i && (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="w-1.5 h-1.5 rounded-full bg-background"
+                      />
+                    )}
+                  </div>
+                  <span className="text-sm text-foreground">{opt}</span>
+                  {selectedOption === i && i === activeQuestion.correctIndex && (
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="ml-auto text-xs text-accent-green"
+                    >
+                      ✓ {language === 'no' ? 'Riktig!' : 'Correct!'}
+                    </motion.span>
+                  )}
+                </motion.div>
               ))}
+            </div>
+          )}
+
+          {/* Short answer with feedback */}
+          {activeQuestion.id === 'short' && (
+            <div className="space-y-2">
+              <div className="bg-surface0/50 rounded-lg p-2.5 text-xs text-foreground border border-surface1">
+                {typedAnswer || <span className="text-subtext0">{language === 'no' ? 'Skriv svar...' : 'Type answer...'}</span>}
+                {!showFeedback && (
+                  <motion.span
+                    animate={{ opacity: [1, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity }}
+                    className="inline-block w-0.5 h-3 bg-accent-mauve ml-0.5 align-middle"
+                  />
+                )}
+              </div>
+              {showFeedback && (
+                <motion.div
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-accent-green/10 border border-accent-green/30 rounded-lg p-2.5 text-xs text-accent-green"
+                >
+                  {feedbackText}
+                  <motion.span
+                    animate={{ opacity: [1, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity }}
+                    className="inline-block w-0.5 h-3 bg-accent-green ml-0.5 align-middle"
+                  />
+                </motion.div>
+              )}
+            </div>
+          )}
+
+          {/* Long answer with feedback */}
+          {activeQuestion.id === 'long' && (
+            <div className="space-y-2">
+              <div className="bg-surface0/50 rounded-lg p-2.5 text-xs text-foreground border border-surface1 h-14 overflow-hidden">
+                {typedAnswer || <span className="text-subtext0">{language === 'no' ? 'Skriv svar...' : 'Type answer...'}</span>}
+                {!showFeedback && (
+                  <motion.span
+                    animate={{ opacity: [1, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity }}
+                    className="inline-block w-0.5 h-3 bg-accent-mauve ml-0.5 align-middle"
+                  />
+                )}
+              </div>
+              {showFeedback && (
+                <motion.div
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-accent-green/10 border border-accent-green/30 rounded-lg p-2.5 text-xs text-accent-green"
+                >
+                  {feedbackText}
+                  <motion.span
+                    animate={{ opacity: [1, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity }}
+                    className="inline-block w-0.5 h-3 bg-accent-green ml-0.5 align-middle"
+                  />
+                </motion.div>
+              )}
             </div>
           )}
         </motion.div>

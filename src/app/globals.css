@@ -113,6 +113,7 @@
   --color-frappe-sapphire: var(--frappe-sapphire);
   --color-frappe-sky: var(--frappe-sky);
   --color-frappe-teal: var(--frappe-teal);
+  --color-frappe-peach: var(--frappe-peach);
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
 }
@@ -219,4 +220,20 @@ body {
 
 .animate-glow-pulse {
   animation: glow-pulse 4s ease-in-out infinite;
+}
+
+/* Electric box effect */
+@keyframes electric-shimmer {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(229, 200, 144, 0.1),
+                inset 0 0 20px rgba(229, 200, 144, 0.02);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(229, 200, 144, 0.2),
+                inset 0 0 30px rgba(229, 200, 144, 0.05);
+  }
+}
+
+.electric-box {
+  animation: electric-shimmer 3s ease-in-out infinite;
 }

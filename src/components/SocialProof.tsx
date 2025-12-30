@@ -4,10 +4,7 @@ import { motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 
 const logos = [
-  { name: 'UiO', abbr: 'UiO' },
-  { name: 'NTNU', abbr: 'NTNU' },
-  { name: 'UiB', abbr: 'UiB' },
-  { name: 'UiT', abbr: 'UiT' },
+  { name: 'UiO', abbr: 'UiO' }
 ];
 
 const quotes = [
