@@ -36,7 +36,7 @@ export function Hero() {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-6 pt-24 pb-16 relative overflow-hidden">
+    <section className="min-h-screen flex items-end justify-center px-6 pt-24 pb-24 relative overflow-hidden">
       <AsciiBackground />
 
       <motion.div
