@@ -1,0 +1,222 @@
+@import "tailwindcss";
+
+/* Catppuccin Frappé (Dark) */
+:root {
+  --frappe-rosewater: #f2d5cf;
+  --frappe-flamingo: #eebebe;
+  --frappe-pink: #f4b8e4;
+  --frappe-mauve: #ca9ee6;
+  --frappe-red: #e78284;
+  --frappe-maroon: #ea999c;
+  --frappe-peach: #ef9f76;
+  --frappe-yellow: #e5c890;
+  --frappe-green: #a6d189;
+  --frappe-teal: #81c8be;
+  --frappe-sky: #99d1db;
+  --frappe-sapphire: #85c1dc;
+  --frappe-blue: #8caaee;
+  --frappe-lavender: #babbf1;
+  --frappe-text: #c6d0f5;
+  --frappe-subtext1: #b5bfe2;
+  --frappe-subtext0: #a5adce;
+  --frappe-overlay2: #949cbb;
+  --frappe-overlay1: #838ba7;
+  --frappe-overlay0: #737994;
+  --frappe-surface2: #626880;
+  --frappe-surface1: #51576d;
+  --frappe-surface0: #414559;
+  --frappe-base: #303446;
+  --frappe-mantle: #292c3c;
+  --frappe-crust: #232634;
+
+  /* Catppuccin Latte (Light) */
+  --latte-rosewater: #dc8a78;
+  --latte-flamingo: #dd7878;
+  --latte-pink: #ea76cb;
+  --latte-mauve: #8839ef;
+  --latte-red: #d20f39;
+  --latte-maroon: #e64553;
+  --latte-peach: #fe640b;
+  --latte-yellow: #df8e1d;
+  --latte-green: #40a02b;
+  --latte-teal: #179299;
+  --latte-sky: #04a5e5;
+  --latte-sapphire: #209fb5;
+  --latte-blue: #1e66f5;
+  --latte-lavender: #7287fd;
+  --latte-text: #4c4f69;
+  --latte-subtext1: #5c5f77;
+  --latte-subtext0: #6c6f85;
+  --latte-overlay2: #7c7f93;
+  --latte-overlay1: #8c8fa1;
+  --latte-overlay0: #9ca0b0;
+  --latte-surface2: #acb0be;
+  --latte-surface1: #bcc0cc;
+  --latte-surface0: #ccd0da;
+  --latte-base: #eff1f5;
+  --latte-mantle: #e6e9ef;
+  --latte-crust: #dce0e8;
+}
+
+/* Dark mode (default) */
+:root {
+  --background: var(--frappe-crust);
+  --foreground: var(--frappe-text);
+  --surface0: var(--frappe-surface0);
+  --surface1: var(--frappe-surface1);
+  --surface2: var(--frappe-surface2);
+  --overlay0: var(--frappe-overlay0);
+  --blue: var(--frappe-blue);
+  --mauve: var(--frappe-mauve);
+  --green: var(--frappe-green);
+  --red: var(--frappe-red);
+  --yellow: var(--frappe-yellow);
+  --subtext0: var(--frappe-subtext0);
+  --subtext1: var(--frappe-subtext1);
+}
+
+/* Light mode */
+[data-theme="light"] {
+  --background: var(--latte-base);
+  --foreground: var(--latte-text);
+  --surface0: var(--latte-surface0);
+  --surface1: var(--latte-surface1);
+  --surface2: var(--latte-surface2);
+  --overlay0: var(--latte-overlay0);
+  --blue: var(--latte-blue);
+  --mauve: var(--latte-mauve);
+  --green: var(--latte-green);
+  --red: var(--latte-red);
+  --yellow: var(--latte-yellow);
+  --subtext0: var(--latte-subtext0);
+  --subtext1: var(--latte-subtext1);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface0: var(--surface0);
+  --color-surface1: var(--surface1);
+  --color-surface2: var(--surface2);
+  --color-overlay0: var(--overlay0);
+  --color-accent-blue: var(--blue);
+  --color-accent-mauve: var(--mauve);
+  --color-accent-green: var(--green);
+  --color-accent-red: var(--red);
+  --color-accent-yellow: var(--yellow);
+  --color-subtext0: var(--subtext0);
+  --color-subtext1: var(--subtext1);
+  /* Frappe colors for direct use */
+  --color-frappe-blue: var(--frappe-blue);
+  --color-frappe-mauve: var(--frappe-mauve);
+  --color-frappe-lavender: var(--frappe-lavender);
+  --color-frappe-sapphire: var(--frappe-sapphire);
+  --color-frappe-sky: var(--frappe-sky);
+  --color-frappe-teal: var(--frappe-teal);
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface0);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--overlay0);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--subtext0);
+}
+
+/* Selection */
+::selection {
+  background: var(--blue);
+  color: var(--background);
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Shimmer animation for input border */
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.shimmer-border {
+  background: linear-gradient(
+    90deg,
+    var(--blue),
+    var(--mauve),
+    var(--blue)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Typewriter cursor */
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+.typewriter-cursor::after {
+  content: '|';
+  animation: blink 1s step-end infinite;
+  color: var(--blue);
+}
+
+/* ASCII glow animation */
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.25;
+    transform: scale(1.05);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 4s ease-in-out infinite;
+}
