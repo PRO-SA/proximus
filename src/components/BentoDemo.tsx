@@ -489,18 +489,27 @@ export function BentoDemo() {
       description: t('demo1Description'),
       component: <PDFDemo />,
       span: 'md:col-span-2',
+      gradient: 'from-frappe-blue/10 via-frappe-sapphire/5 to-transparent',
+      borderColor: 'border-frappe-blue/30 hover:border-frappe-blue/50',
+      titleColor: 'text-frappe-blue',
     },
     {
       title: t('demo2Title'),
       description: t('demo2Description'),
       component: <ChatDemo />,
       span: 'md:col-span-1',
+      gradient: 'from-frappe-teal/10 via-frappe-green/5 to-transparent',
+      borderColor: 'border-frappe-teal/30 hover:border-frappe-teal/50',
+      titleColor: 'text-frappe-teal',
     },
     {
       title: t('demo3Title'),
       description: t('demo3Description'),
       component: <ExamDemo />,
       span: 'md:col-span-3',
+      gradient: 'from-frappe-mauve/10 via-frappe-pink/5 to-transparent',
+      borderColor: 'border-frappe-mauve/30 hover:border-frappe-mauve/50',
+      titleColor: 'text-frappe-mauve',
     },
   ];
 
@@ -525,9 +534,9 @@ export function BentoDemo() {
             <motion.div
               key={i}
               variants={itemVariants}
-              className={`p-6 rounded-3xl bg-surface0/30 backdrop-blur-sm border border-surface1 ${demo.span}`}
+              className={`p-6 rounded-3xl bg-linear-to-br ${demo.gradient} backdrop-blur-sm border ${demo.borderColor} transition-all duration-300 ${demo.span}`}
             >
-              <h3 className="text-lg font-semibold mb-2">{demo.title}</h3>
+              <h3 className={`text-lg font-semibold mb-2 ${demo.titleColor}`}>{demo.title}</h3>
               <p className="text-sm text-subtext0 mb-6">{demo.description}</p>
               {demo.component}
             </motion.div>

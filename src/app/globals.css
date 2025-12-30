@@ -114,6 +114,11 @@
   --color-frappe-sky: var(--frappe-sky);
   --color-frappe-teal: var(--frappe-teal);
   --color-frappe-peach: var(--frappe-peach);
+  --color-frappe-pink: var(--frappe-pink);
+  --color-frappe-rosewater: var(--frappe-rosewater);
+  --color-frappe-flamingo: var(--frappe-flamingo);
+  --color-frappe-maroon: var(--frappe-maroon);
+  --color-frappe-green: var(--frappe-green);
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
 }

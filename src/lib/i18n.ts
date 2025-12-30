@@ -29,8 +29,8 @@ export const translations = {
     step1Description: 'Legg inn e-postadressen din for å sikre plassen din på ventelisten.',
     step2Title: 'Vent på lansering',
     step2Description: 'Vi sender deg beskjed én uke før, og på selve lanseringsdagen.',
-    step3Title: 'Turboladning',
-    step3Description: 'Slipp løs ditt fulle potensial med KI-drevet læring.',
+    step3Title: 'Neste nivå',
+    step3Description: 'Ta utdanningen din til nye høyder med KI-drevet læring.',
 
     // Bento demos
     demosTitle: 'Hva du kan gjøre med Janus',
@@ -99,8 +99,8 @@ export const translations = {
     step1Description: 'Enter your email to secure your spot on the waitlist.',
     step2Title: 'Wait for launch',
     step2Description: 'We\'ll notify you one week before and on launch day.',
-    step3Title: 'Supercharge',
-    step3Description: 'Unleash your full potential with AI-powered learning.',
+    step3Title: 'Level up',
+    step3Description: 'Take your education to new heights with AI-powered learning.',
 
     // Bento demos
     demosTitle: 'What you can do with Janus',

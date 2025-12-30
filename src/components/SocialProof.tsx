@@ -15,6 +15,8 @@ const quotes = [
     },
     author: 'Maria S.',
     role: { no: 'Medisinstudent, UiO', en: 'Medical student, UiO' },
+    color: 'frappe-blue',
+    gradient: 'from-frappe-blue/10 to-transparent',
   },
   {
     text: {
@@ -23,6 +25,8 @@ const quotes = [
     },
     author: 'Erik L.',
     role: { no: 'Jusstudent, UiB', en: 'Law student, UiB' },
+    color: 'frappe-teal',
+    gradient: 'from-frappe-teal/10 to-transparent',
   },
   {
     text: {
@@ -31,6 +35,8 @@ const quotes = [
     },
     author: 'Ingrid K.',
     role: { no: 'PhD-kandidat, NTNU', en: 'PhD candidate, NTNU' },
+    color: 'frappe-mauve',
+    gradient: 'from-frappe-mauve/10 to-transparent',
   },
   {
     text: {
@@ -39,6 +45,8 @@ const quotes = [
     },
     author: 'Prof. Anders H.',
     role: { no: 'Professor, UiT', en: 'Professor, UiT' },
+    color: 'frappe-peach',
+    gradient: 'from-frappe-peach/10 to-transparent',
   },
 ];
 
@@ -91,28 +99,60 @@ export function SocialProof() {
 
         {/* Quotes grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {quotes.map((quote, i) => (
-            <motion.div
-              key={i}
-              variants={itemVariants}
-              className="p-6 rounded-3xl bg-surface0/30 backdrop-blur-sm border border-surface1"
-            >
-              <p className="text-foreground mb-4 leading-relaxed">
-                &ldquo;{quote.text[language]}&rdquo;
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-surface1 flex items-center justify-center">
-                  <span className="text-sm font-medium text-subtext0">
-                    {quote.author.charAt(0)}
-                  </span>
+          {quotes.map((quote, i) => {
+            const colorClasses = {
+              'frappe-blue': {
+                border: 'border-frappe-blue/20 hover:border-frappe-blue/40',
+                bg: 'bg-frappe-blue/20',
+                text: 'text-frappe-blue',
+              },
+              'frappe-teal': {
+                border: 'border-frappe-teal/20 hover:border-frappe-teal/40',
+                bg: 'bg-frappe-teal/20',
+                text: 'text-frappe-teal',
+              },
+              'frappe-mauve': {
+                border: 'border-frappe-mauve/20 hover:border-frappe-mauve/40',
+                bg: 'bg-frappe-mauve/20',
+                text: 'text-frappe-mauve',
+              },
+              'frappe-peach': {
+                border: 'border-frappe-peach/20 hover:border-frappe-peach/40',
+                bg: 'bg-frappe-peach/20',
+                text: 'text-frappe-peach',
+              },
+            }[quote.color];
+
+            const gradientClasses = {
+              'from-frappe-blue/10 to-transparent': 'from-frappe-blue/10 to-transparent',
+              'from-frappe-teal/10 to-transparent': 'from-frappe-teal/10 to-transparent',
+              'from-frappe-mauve/10 to-transparent': 'from-frappe-mauve/10 to-transparent',
+              'from-frappe-peach/10 to-transparent': 'from-frappe-peach/10 to-transparent',
+            }[quote.gradient];
+
+            return (
+              <motion.div
+                key={i}
+                variants={itemVariants}
+                className={`p-6 rounded-3xl bg-linear-to-br ${gradientClasses} backdrop-blur-sm border ${colorClasses?.border} transition-all duration-300`}
+              >
+                <p className="text-foreground mb-4 leading-relaxed">
+                  &ldquo;{quote.text[language]}&rdquo;
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-full ${colorClasses?.bg} flex items-center justify-center`}>
+                    <span className={`text-sm font-medium ${colorClasses?.text}`}>
+                      {quote.author.charAt(0)}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{quote.author}</p>
+                    <p className="text-xs text-subtext0">{quote.role[language]}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-foreground">{quote.author}</p>
-                  <p className="text-xs text-subtext0">{quote.role[language]}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </motion.div>
     </section>
